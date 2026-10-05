@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toronto Gallery | ExploreLog</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .back-home {
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            border: 1px solid #ccc;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .back-home:hover {
+            background-color: #333;
+            color: #fff;
+            border-color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        /* Pure CSS Masonry/Flex Photo Grid */
+        .photo-stream {
+            columns: 3 300px;
+            column-gap: 20px;
+        }
+
+        .photo-stream img {
+            width: 100%;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+            display: block;
+        }
+
+        .photo-stream img:hover {
+            transform: scale(1.02);
+            cursor: pointer;
+        }
+
+        footer {
+            background-color: #111;
+            color: #888;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 60px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo">ExploreLog</a>
+        <a href="index.html" class="back-home">&larr; Back to Destinations</a>
+    </header>
+
+    <main class="container">
+        <h1>Toronto, Canada</h1>
+        <p class="subtitle">A collection of moments captured across the city.</p>
+        
+        <div class="photo-stream">
+            <!-- Put your folder paths to your extra photos here -->
+            <!-- Change 'pics/toronto.JPEG' to whatever your images are named -->
+            <img src="pics/toronto/IMG_1991.JPEG" alt="Toronto Photo">
+            <img src="pics/toronto/IMG_5263.JPEG" alt="Toronto Photo">
+            <img src="pics/toronto/IMG_2634.JPEG" alt="Toronto Photo">
+            <img src="pics/toronto/20240421_135045.jpg" alt="Toronto Photo">
+            <img src="pics/toronto/20240522_171307.jpg" alt="Toronto Photo">
+            <img src="pics/toronto/IMG_5207.JPEG" alt="Toronto Photo">
+            <img src="pics/toronto/IMG_3425.JPEG" alt="Toronto Photo">
+            <img src="pics/toronto/IMG_3428.JPEG" alt="Toronto Photo">
+            <img src="pics/toronto/IMG_5264.JPEG" alt="Toronto Photo">
+            <img src="pics/toronto/IMG_5270.JPEG" alt="Toronto Photo">
+            <img src="pics/toronto/IMG_5281.JPEG" alt="Toronto Photo">
+            <img src="pics/toronto/IMG_5290.JPEG" alt="Toronto Photo">
+
+
+
+
+
+
+
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 ExploreLog Photography.</p>
+    </footer>
+
+</body>
+</html>
