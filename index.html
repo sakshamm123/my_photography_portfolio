@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wanderlust Captures | Dynamic Travel Photography</title>
+    <style>
+        /* Base Reset & Fonts */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header Navigation */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .back-btn {
+            display: none; /* Hidden by default, shown in gallery view */
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            border: 1px solid #ccc;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background-color: #333;
+            color: #fff;
+            border-color: #333;
+        }
+
+        /* Hero Banner Section */
+        .hero {
+            position: relative;
+            height: 60vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
+                        url('pics/hero_bg.jpg') no-repeat center center/cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #fff;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            font-weight: 300;
+            max-width: 600px;
+        }
+
+        /* Main Content Container */
+        .container {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background-color: #333;
+            margin: 10px auto 0;
+        }
+
+        /* Photo & Destination Grid (Home View) */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .gallery-card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .gallery-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .image-container {
+            position: relative;
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-card:hover .image-container img {
+            transform: scale(1.05);
+        }
+
+        .location-badge {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 5px 12px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 4px;
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .card-content h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .card-content p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .view-btn {
+            display: inline-block;
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 2px;
+            cursor: pointer;
+            transition: color 0.3s, border-color 0.3s;
+        }
+
+        .view-btn:hover {
+            color: #666;
+            border-color: #666;
+        }
+
+        /* Dynamic Album View Layout (Initially Hidden) */
+        #album-view {
+            display: none;
+        }
+
+        .photo-stream {
+            columns: 3 300px;
+            column-gap: 20px;
+        }
+
+        .photo-stream img {
+            width: 100%;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+            display: block;
+        }
+
+        .photo-stream img:hover {
+            transform: scale(1.02);
+            cursor: pointer;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #111;
+            color: #888;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 80px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="logo" onclick="showHomeView()">ExploreLog</div>
+        <div class="back-btn" id="backBtn" onclick="showHomeView()">&larr; Back to Destinations</div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="container">
+        
+        <!-- HOME VIEW: Shows all travel destination options -->
+        <div id="home-view">
+                <!-- Hero Banner Section -->
+    <section class="hero" id="heroBanner">
+        <h1>My Adventures</h1>
+        <p>Capturing unique moments, cultures, and landscapes from my journeys across the Continent.</p>
+    </section>
+            <h2 class="section-title">Latest Destinations</h2>
+            <div class="gallery-grid">
+                
+                <!-- Card 1: Toronto -->
+                <div class="gallery-card">
+                    <div class="image-container">
+                        <img src="pics/toronto.JPEG" alt="Toronto Skyline">
+                        <span class="location-badge">Toronto</span>
+                    </div>
+                    <div class="card-content">
+                        <h3>Toronto Skyline</h3>
+                        <p>Capturing the soaring heights of the CN Tower and the bustling energy of downtown.</p>
+                        <span class="view-btn" onclick="openGallery('toronto')">View Gallery</span>
+                    </div>
+                </div>
+
+                <!-- Card 2: Montreal -->
+                <div class="gallery-card">
+                    <div class="image-container">
+                        <img src="pics/montreal.JPEG" alt="Old Montreal">
+                        <span class="location-badge">Montreal</span>
+                    </div>
+                    <div class="card-content">
+                        <h3>Historic Montreal</h3>
+                        <p>Wandering through historic cobblestone streets, grand basilicas, and vibrant cafes.</p>
+                        <span class="view-btn" onclick="openGallery('montreal')">View Gallery</span>
+                    </div>
+                </div>
+
+                <!-- Card 3: Ottawa -->
+                <div class="gallery-card">
+                    <div class="image-container">
+                        <img src="pics/ottawa.JPEG" alt="Ottawa Parliament">
+                        <span class="location-badge">Ottawa</span>
+                    </div>
+                    <div class="card-content">
+                        <h3>Capital Charm</h3>
+                        <p>Exploring the historic architecture of Parliament Hill and the scenic Rideau Canal.</p>
+                        <span class="view-btn" onclick="openGallery('ottawa')">View Gallery</span>
+                    </div>
+                </div>
+
+                <!-- Card 4: NYC -->
+                <div class="gallery-card">
+                    <div class="image-container">
+                        <img src="pics/nyc.JPEG" alt="New York City Streets">
+                        <span class="location-badge">NYC</span>
+                    </div>
+                    <div class="card-content">
+                        <h3>The Big Apple</h3>
+                        <p>Immersing in the yellow cabs, soaring skyscrapers, and endless rhythm of Manhattan.</p>
+                        <span class="view-btn" onclick="openGallery('nyc')">View Gallery</span>
+                    </div>
+                </div>
+
+                <!-- Card 5: Quebec City -->
+                <div class="gallery-card">
+                    <div class="image-container">
+                        <img src="pics/quebec_city.JPEG" alt="Quebec City Old Town">
+                        <span class="location-badge">Quebec City</span>
+                    </div>
+                    <div class="card-content">
+                        <h3>Old Quebec European Flair</h3>
+                        <p>Stepping back in time within fortified walls and dramatic castle views.</p>
+                        <span class="view-btn" onclick="openGallery('quebec_city')">View Gallery</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- DYNAMIC ALBUM VIEW: Populated cleanly by JavaScript -->
+        <div id="album-view">
+            <h2 class="section-title" id="album-title">City Gallery</h2>
+            <div class="photo-stream" id="photo-stream-container">
+                <!-- Images inject automatically here -->
+            </div>
+            <script src="script.js"></script>
+</body>
+</html>
