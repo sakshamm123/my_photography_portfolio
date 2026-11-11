@@ -1,11 +1,24 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wanderlust Captures | Dynamic Travel Photography</title>
+    <title>Wanderlust Captures | Travel Photography</title>
     <style>
-        /* Base Reset & Fonts */
+        :root {
+            --bg: #0d0d0c;
+            --bg-soft: #151412;
+            --panel: rgba(255,255,255,0.04);
+            --panel-strong: rgba(255,255,255,0.06);
+            --ink: #f5f1ea;
+            --ink-soft: rgba(245,241,234,0.76);
+            --muted: rgba(245,241,234,0.56);
+            --accent: #d9a267;
+            --accent-strong: #b87942;
+            --line: rgba(255,255,255,0.09);
+            --shadow: rgba(0,0,0,0.35);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,124 +26,413 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            background-color: #f9f9f9;
-            color: #333;
+            background:
+                radial-gradient(circle at top, rgba(217,162,103,0.18), transparent 28%),
+                linear-gradient(180deg, var(--bg) 0%, #110f0d 100%);
+            color: var(--ink);
             line-height: 1.6;
         }
 
-        /* Header Navigation */
-        header {
+        img, video {
+            max-width: 100%;
+            display: block;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font: inherit;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 20;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 8%;
-            background-color: #ffffff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            padding: 20px 5.5vw;
+            background: rgba(13, 13, 12, 0.7);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid var(--line);
         }
 
-        .logo {
-            font-size: 24px;
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.78rem;
             font-weight: 700;
-            letter-spacing: 1px;
+            letter-spacing: 0.22rem;
             text-transform: uppercase;
             cursor: pointer;
         }
 
-        .back-btn {
-            display: none; /* Hidden by default, shown in gallery view */
-            text-decoration: none;
-            color: #555;
-            font-weight: 600;
-            border: 1px solid #ccc;
-            padding: 8px 16px;
-            border-radius: 4px;
+        .brand-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+            box-shadow: 0 0 0 5px rgba(217,162,103,0.15);
+        }
+
+        .nav {
+            display: flex;
+            gap: 30px;
+            color: var(--ink-soft);
+            font-size: 0.82rem;
+            letter-spacing: 0.12rem;
+            text-transform: uppercase;
+        }
+
+        .nav a {
+            transition: color 0.2s ease;
+        }
+
+        .nav a:hover {
+            color: var(--ink);
+        }
+
+        .nav-cta,
+        .back-btn,
+        .primary-btn,
+        .secondary-btn {
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: rgba(255,255,255,0.02);
+            color: var(--ink);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
         }
 
-        .back-btn:hover {
-            background-color: #333;
-            color: #fff;
-            border-color: #333;
+        .nav-cta {
+            padding: 10px 18px;
+            font-size: 0.7rem;
+            letter-spacing: 0.14rem;
+            text-transform: uppercase;
         }
 
-        /* Hero Banner Section */
+        .nav-cta:hover,
+        .back-btn:hover,
+        .primary-btn:hover,
+        .secondary-btn:hover {
+            transform: translateY(-1px);
+            border-color: rgba(255,255,255,0.18);
+        }
+
+        .back-btn {
+            display: none;
+            padding: 10px 18px;
+            font-size: 0.72rem;
+            letter-spacing: 0.12rem;
+            text-transform: uppercase;
+        }
+
+        .page-shell {
+            max-width: 1420px;
+            margin: 0 auto;
+            padding: 28px 5.5vw 80px;
+        }
+
         .hero {
             position: relative;
-            height: 60vh;
-            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
-                        url('pics/hero_bg.jpg') no-repeat center center/cover;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: #fff;
-            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 28px;
+            align-items: end;
+            min-height: 76vh;
+            padding: 48px 0 22px;
+        }
+
+        .hero-copy {
+            position: relative;
+            z-index: 1;
+            padding: 40px 0 18px;
+        }
+
+        .kicker {
+            color: var(--muted);
+            font-size: 0.74rem;
+            letter-spacing: 0.25rem;
+            text-transform: uppercase;
+            margin-bottom: 18px;
         }
 
         .hero h1 {
-            font-size: 48px;
-            margin-bottom: 15px;
-            letter-spacing: 2px;
+            font-size: clamp(3.4rem, 7vw, 9rem);
+            line-height: 0.9;
+            letter-spacing: -0.075em;
+            max-width: 760px;
+            margin-bottom: 20px;
         }
 
         .hero p {
-            font-size: 20px;
-            font-weight: 300;
-            max-width: 600px;
+            color: var(--ink-soft);
+            font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+            max-width: 620px;
         }
 
-        /* Main Content Container */
-        .container {
-            max-width: 1200px;
-            margin: 60px auto;
-            padding: 0 20px;
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 28px;
         }
 
-        .section-title {
-            text-align: center;
-            font-size: 32px;
-            margin-bottom: 40px;
+        .primary-btn,
+        .secondary-btn {
+            padding: 14px 22px;
+            font-size: 0.74rem;
+            letter-spacing: 0.12rem;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+            color: #120e0b;
+            border-color: transparent;
+        }
+
+        .secondary-btn {
+            background: rgba(255,255,255,0.02);
+            color: var(--ink);
+        }
+
+        .hero-visual {
             position: relative;
+            min-height: 620px;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 22px 52px var(--shadow);
+            border: 1px solid var(--line);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            cursor: pointer;
+            transition: background-image 0.6s ease, transform 0.3s ease;
         }
 
-        .section-title::after {
-            content: '';
+        .hero-visual:hover {
+            transform: translateY(-2px);
+        }
+
+        .hero-visual::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(8,8,8,0.12), rgba(8,8,8,0.68));
+        }
+
+        .hero-meta {
+            position: absolute;
+            left: 26px;
+            right: 26px;
+            bottom: 22px;
+            z-index: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 20px;
+        }
+
+        .hero-meta strong {
             display: block;
-            width: 50px;
-            height: 3px;
-            background-color: #333;
-            margin: 10px auto 0;
+            font-size: 0.7rem;
+            letter-spacing: 0.18rem;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 8px;
         }
 
-        /* Photo & Destination Grid (Home View) */
+        .hero-meta span {
+            font-size: clamp(1.4rem, 2vw, 2rem);
+            line-height: 1.1;
+            letter-spacing: -0.04em;
+        }
+
+        .section-label {
+            display: inline-block;
+            margin: 54px 0 20px;
+            color: var(--muted);
+            font-size: 0.72rem;
+            letter-spacing: 0.22rem;
+            text-transform: uppercase;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 24px;
+        }
+
+        .feature-card {
+            position: relative;
+            min-height: 430px;
+            border-radius: 28px;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            box-shadow: 0 22px 52px var(--shadow);
+            background-size: cover;
+            background-position: center;
+        }
+
+        .feature-card.large {
+            min-height: 560px;
+        }
+
+        .feature-card::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.56));
+        }
+
+        .feature-card-content {
+            position: absolute;
+            left: 26px;
+            right: 26px;
+            bottom: 22px;
+            z-index: 1;
+        }
+
+        .feature-card-content span {
+            display: block;
+            font-size: 0.68rem;
+            letter-spacing: 0.18rem;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.78);
+            margin-bottom: 8px;
+        }
+
+        .feature-card-content h3 {
+            font-size: clamp(1.7rem, 3vw, 3rem);
+            letter-spacing: -0.05em;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .feature-card-content p {
+            color: rgba(255,255,255,0.76);
+            max-width: 500px;
+        }
+
+        .destination-section {
+            padding-top: 26px;
+        }
+
+        .about-section,
+        .contact-section {
+            padding-top: 24px;
+        }
+
+        .about-card,
+        .contact-card,
+        .contact-form {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: 0 18px 32px rgba(0,0,0,0.15);
+        }
+
+        .about-card h2,
+        .contact-card h3 {
+            font-size: clamp(2rem, 3vw, 3.1rem);
+            letter-spacing: -0.05em;
+            line-height: 1.02;
+            margin-bottom: 16px;
+        }
+
+        .about-card p,
+        .contact-card p {
+            color: var(--ink-soft);
+            font-size: 1.02rem;
+            max-width: 720px;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 0.8fr 1.2fr;
+            gap: 24px;
+            margin-top: 18px;
+        }
+
+        .contact-card ul {
+            margin-top: 18px;
+            padding-left: 18px;
+            color: var(--ink-soft);
+            line-height: 1.8;
+        }
+
+        .contact-form {
+            display: grid;
+            gap: 18px;
+        }
+
+        .form-row label {
+            display: block;
+            font-size: 0.74rem;
+            letter-spacing: 0.12rem;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: rgba(255,255,255,0.02);
+            color: var(--ink);
+            padding: 14px 16px;
+            font: inherit;
+            resize: vertical;
+            min-height: 52px;
+        }
+
+        .contact-form textarea {
+            min-height: 160px;
+        }
+
+        .form-status {
+            min-height: 20px;
+            color: var(--ink-soft);
+            font-size: 0.9rem;
+        }
+
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 24px;
+            margin-top: 18px;
         }
 
         .gallery-card {
-            background-color: #ffffff;
-            border-radius: 8px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--line);
+            border-radius: 24px;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.2s ease, border-color 0.2s ease;
         }
 
         .gallery-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transform: translateY(-4px);
+            border-color: rgba(255,255,255,0.18);
         }
 
         .image-container {
             position: relative;
-            height: 250px;
+            height: 300px;
             overflow: hidden;
         }
 
@@ -142,184 +444,380 @@
         }
 
         .gallery-card:hover .image-container img {
-            transform: scale(1.05);
+            transform: scale(1.04);
         }
 
         .location-badge {
             position: absolute;
-            bottom: 15px;
-            left: 15px;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: #fff;
-            padding: 5px 12px;
-            font-size: 12px;
+            left: 16px;
+            bottom: 16px;
+            display: inline-block;
+            padding: 7px 11px;
+            border-radius: 999px;
+            background: rgba(0,0,0,0.5);
+            color: rgba(255,255,255,0.9);
+            font-size: 0.66rem;
+            letter-spacing: 0.14rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            border-radius: 4px;
         }
 
         .card-content {
-            padding: 20px;
+            padding: 20px 20px 24px;
         }
 
         .card-content h3 {
-            font-size: 20px;
+            font-size: 1.9rem;
+            letter-spacing: -0.05em;
             margin-bottom: 10px;
         }
 
         .card-content p {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 15px;
+            color: var(--ink-soft);
+            margin-bottom: 18px;
+            min-height: 62px;
         }
 
         .view-btn {
             display: inline-block;
-            text-decoration: none;
-            color: #333;
-            font-weight: 600;
-            font-size: 14px;
-            border-bottom: 2px solid #333;
-            padding-bottom: 2px;
+            color: var(--ink);
+            border-bottom: 1px solid rgba(255,255,255,0.28);
+            font-size: 0.74rem;
+            letter-spacing: 0.14rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            padding-bottom: 5px;
             cursor: pointer;
-            transition: color 0.3s, border-color 0.3s;
         }
 
-        .view-btn:hover {
-            color: #666;
-            border-color: #666;
-        }
-
-        /* Dynamic Album View Layout (Initially Hidden) */
         #album-view {
             display: none;
+            padding-top: 28px;
+        }
+
+        .album-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin: 14px 0 20px;
+        }
+
+        .album-title {
+            font-size: clamp(2.2rem, 4vw, 4rem);
+            letter-spacing: -0.06em;
+            line-height: 1;
         }
 
         .photo-stream {
-            columns: 3 300px;
+            columns: 3 280px;
             column-gap: 20px;
         }
 
-        .photo-stream img {
+        .photo-stream img,
+        .photo-stream video {
             width: 100%;
-            margin-bottom: 20px;
-            border-radius: 6px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease;
             display: block;
-        }
-
-        .photo-stream img:hover {
-            transform: scale(1.02);
+            border-radius: 18px;
+            margin-bottom: 18px;
+            box-shadow: 0 18px 32px rgba(0,0,0,0.25);
+            break-inside: avoid;
             cursor: pointer;
         }
 
-        /* Footer */
-        footer {
-            background-color: #111;
-            color: #888;
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(7, 7, 7, 0.92);
+            z-index: 100;
+            padding: 24px;
+        }
+
+        .lightbox.open {
+            display: flex;
+        }
+
+        .lightbox-inner {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            max-width: min(94vw, 1200px);
+            max-height: 94vh;
+        }
+
+        .lightbox-image {
+            display: block;
+            width: min(90vw, 1200px);
+            max-height: 86vh;
+            object-fit: contain;
+            border-radius: 18px;
+            background: rgba(255,255,255,0.03);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.45);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -16px;
+            right: -16px;
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            background: rgba(0,0,0,0.6);
+            color: var(--ink);
+            font-size: 1.7rem;
+            cursor: pointer;
+        }
+
+        .lightbox-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            width: 100%;
+            margin-top: 16px;
+            padding: 0 6px;
+        }
+
+        .lightbox-nav {
+            width: 42px;
+            height: 42px;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 50%;
+            background: rgba(255,255,255,0.04);
+            color: var(--ink);
+            font-size: 1.3rem;
+            cursor: pointer;
+        }
+
+        .lightbox-counter {
+            flex: 1;
             text-align: center;
-            padding: 40px 20px;
-            margin-top: 80px;
-            font-size: 14px;
+            color: rgba(255,255,255,0.75);
+            letter-spacing: 0.18rem;
+            text-transform: uppercase;
+            font-size: 0.68rem;
+        }
+
+        footer {
+            text-align: center;
+            color: rgba(255,255,255,0.54);
+            letter-spacing: 0.12rem;
+            text-transform: uppercase;
+            font-size: 0.62rem;
+            padding: 30px 10px 40px;
+        }
+
+        @media (max-width: 980px) {
+            .hero {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-grid,
+            .gallery-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .nav {
+                display: none;
+            }
+
+            .hero {
+                min-height: auto;
+                padding-top: 16px;
+            }
+
+            .hero-visual {
+                min-height: 420px;
+            }
+
+            .feature-grid,
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-card .card-content p {
+                min-height: auto;
+            }
         }
     </style>
 </head>
 <body>
-
-    <!-- Header Section -->
-    <header>
-        <div class="logo" onclick="showHomeView()">ExploreLog</div>
-        <div class="back-btn" id="backBtn" onclick="showHomeView()">&larr; Back to Destinations</div>
-    </header>
-
-    <!-- Main Container -->
-    <main class="container">
-        
-        <!-- HOME VIEW: Shows all travel destination options -->
-        <div id="home-view">
-                <!-- Hero Banner Section -->
-    <section class="hero" id="heroBanner">
-        <h1>My Adventures</h1>
-        <p>Capturing unique moments, cultures, and landscapes from my journeys across the Continent.</p>
-    </section>
-            <h2 class="section-title">Latest Destinations</h2>
-            <div class="gallery-grid">
-                
-                <!-- Card 1: Toronto -->
-                <div class="gallery-card">
-                    <div class="image-container">
-                        <img src="pics/toronto.JPEG" alt="Toronto Skyline">
-                        <span class="location-badge">Toronto</span>
-                    </div>
-                    <div class="card-content">
-                        <h3>Toronto Skyline</h3>
-                        <p>Capturing the soaring heights of the CN Tower and the bustling energy of downtown.</p>
-                        <span class="view-btn" onclick="openGallery('toronto')">View Gallery</span>
-                    </div>
-                </div>
-
-                <!-- Card 2: Montreal -->
-                <div class="gallery-card">
-                    <div class="image-container">
-                        <img src="pics/montreal.JPEG" alt="Old Montreal">
-                        <span class="location-badge">Montreal</span>
-                    </div>
-                    <div class="card-content">
-                        <h3>Historic Montreal</h3>
-                        <p>Wandering through historic cobblestone streets, grand basilicas, and vibrant cafes.</p>
-                        <span class="view-btn" onclick="openGallery('montreal')">View Gallery</span>
-                    </div>
-                </div>
-
-                <!-- Card 3: Ottawa -->
-                <div class="gallery-card">
-                    <div class="image-container">
-                        <img src="pics/ottawa.JPEG" alt="Ottawa Parliament">
-                        <span class="location-badge">Ottawa</span>
-                    </div>
-                    <div class="card-content">
-                        <h3>Capital Charm</h3>
-                        <p>Exploring the historic architecture of Parliament Hill and the scenic Rideau Canal.</p>
-                        <span class="view-btn" onclick="openGallery('ottawa')">View Gallery</span>
-                    </div>
-                </div>
-
-                <!-- Card 4: NYC -->
-                <div class="gallery-card">
-                    <div class="image-container">
-                        <img src="pics/nyc.JPEG" alt="New York City Streets">
-                        <span class="location-badge">NYC</span>
-                    </div>
-                    <div class="card-content">
-                        <h3>The Big Apple</h3>
-                        <p>Immersing in the yellow cabs, soaring skyscrapers, and endless rhythm of Manhattan.</p>
-                        <span class="view-btn" onclick="openGallery('nyc')">View Gallery</span>
-                    </div>
-                </div>
-
-                <!-- Card 5: Quebec City -->
-                <div class="gallery-card">
-                    <div class="image-container">
-                        <img src="pics/quebec_city.JPEG" alt="Quebec City Old Town">
-                        <span class="location-badge">Quebec City</span>
-                    </div>
-                    <div class="card-content">
-                        <h3>Old Quebec European Flair</h3>
-                        <p>Stepping back in time within fortified walls and dramatic castle views.</p>
-                        <span class="view-btn" onclick="openGallery('quebec_city')">View Gallery</span>
-                    </div>
-                </div>
-
-            </div>
+    <header class="topbar">
+        <div class="brand" onclick="showHomeView()">
+            <span class="brand-dot"></span>
+            Photography Journal
         </div>
 
-        <!-- DYNAMIC ALBUM VIEW: Populated cleanly by JavaScript -->
-        <div id="album-view">
-            <h2 class="section-title" id="album-title">City Gallery</h2>
-            <div class="photo-stream" id="photo-stream-container">
-                <!-- Images inject automatically here -->
+        <nav class="nav" aria-label="Main navigation">
+            <a href="#journeys">Journeys</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+        </nav>
+
+        <button class="nav-cta" onclick="showHomeView()">See gallery</button>
+        <div class="back-btn" id="backBtn" onclick="showHomeView()">Back</div>
+    </header>
+
+    <main class="page-shell">
+        <section class="hero" id="hero-banner">
+            <div class="hero-copy">
+                <p class="kicker">Travel photography </p>
+                <h1>Quiet light. Big stories.</h1>
+                <p>Street corners, skyline silhouettes, and slow moments from the cities and coastlines that stayed with me.</p>
+                <div class="hero-actions">
+                    <a href="#journeys" class="primary-btn">View journeys</a>
+                    <button class="secondary-btn" onclick="showHomeView()">Explore gallery</button>
+                </div>
             </div>
-            <script src="script.js"></script>
+
+            <div class="hero-visual" id="hero-visual" aria-label="Featured city slideshow" tabindex="0" role="button">
+                <div class="hero-meta">
+                    <div>
+                        <strong>Featured story</strong>
+                        <span id="hero-city">Quebec City</span>
+                    </div>
+                    <span id="hero-index">04</span>
+                </div>
+            </div>
+        </section>
+
+        <div id="home-view">
+            <div class="section-label">Selected cities</div>
+            <section class="destination-section" id="journeys" aria-label="Destination gallery">
+                <div class="gallery-grid">
+                    <div class="gallery-card">
+                        <div class="image-container">
+                            <img src="pics/toronto.JPEG" alt="Toronto skyline">
+                            <span class="location-badge">Toronto</span>
+                        </div>
+                        <div class="card-content">
+                            <h3>Toronto</h3>
+                            <p>Skyline reflections and quiet moments from the city’s layered streets.</p>
+                            <span class="view-btn" onclick="openGallery('toronto')">View gallery</span>
+                        </div>
+                    </div>
+
+                    <div class="gallery-card">
+                        <div class="image-container">
+                            <img src="pics/montreal.JPEG" alt="Montreal streets">
+                            <span class="location-badge">Montreal</span>
+                        </div>
+                        <div class="card-content">
+                            <h3>Montreal</h3>
+                            <p>Historic facades, old alleys, and a city shaped by light and texture.</p>
+                            <span class="view-btn" onclick="openGallery('montreal')">View gallery</span>
+                        </div>
+                    </div>
+
+                    <div class="gallery-card">
+                        <div class="image-container">
+                            <img src="pics/ottawa.JPEG" alt="Ottawa parliament">
+                            <span class="location-badge">Ottawa</span>
+                        </div>
+                        <div class="card-content">
+                            <h3>Ottawa</h3>
+                            <p>Government halls, scenic canals, and careful framing of a polished capital.</p>
+                            <span class="view-btn" onclick="openGallery('ottawa')">View gallery</span>
+                        </div>
+                    </div>
+
+                    <div class="gallery-card">
+                        <div class="image-container">
+                            <img src="pics/nyc.JPEG" alt="New York city streets">
+                            <span class="location-badge">New York</span>
+                        </div>
+                        <div class="card-content">
+                            <h3>New York</h3>
+                            <p>Lights, motion, and the sheer density of a place that never quite slows down.</p>
+                            <span class="view-btn" onclick="openGallery('nyc')">View gallery</span>
+                        </div>
+                    </div>
+
+                    <div class="gallery-card">
+                        <div class="image-container">
+                            <img src="pics/quebec_city.JPEG" alt="Quebec city old town">
+                            <span class="location-badge">Quebec</span>
+                        </div>
+                        <div class="card-content">
+                            <h3>Quebec City</h3>
+                            <p>Stone walls, dramatic skies, and the feeling of wandering through another era.</p>
+                            <span class="view-btn" onclick="openGallery('quebec_city')">View gallery</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="about-section" id="about">
+                <div class="section-label">About</div>
+                <div class="about-card">
+                    <h2>Travel stories through motion, light, and memory.</h2>
+                    <p>Hi! My name is Saksham Mishra. I am trying something new and these are some of the pictures I clicked wherever I have been. Hope you like my work.</p>
+                </div>
+            </section>
+        </div>
+
+        <section class="contact-section" id="contact">
+            <div class="section-label">Contact</div>
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <h3>Let’s connect.</h3>
+                    <p>For commissions, collaborations, or just to say hello, send me a message. I’d love to hear about your idea or plan.</p>
+                    <ul>
+                        <li>Email: sakshammishra1920@gmail.com</li>
+                        <li>Based in Canada</li>
+                        <li>Available for photography and creative projects</li>
+                    </ul>
+                </div>
+
+                <form class="contact-form" id="contactForm">
+                    <div class="form-row">
+                        <label for="name">Name</label>
+                        <input id="name" name="name" type="text" placeholder="Your name" required>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="email">Email</label>
+                        <input id="email" name="email" type="email" placeholder="you@example.com" required>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" placeholder="Tell me about your project or inquiry..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="primary-btn">Send inquiry</button>
+                    <div class="form-status" id="form-status" aria-live="polite"></div>
+                </form>
+            </div>
+        </section>
+
+        <div id="album-view">
+            <div class="album-head">
+                <h2 class="album-title" id="album-title">City Gallery</h2>
+            </div>
+            <div class="photo-stream" id="photo-stream-container"></div>
+        </div>
+    </main>
+
+    <footer>Wanderlust Captures — Travel photography journal</footer>
+    <div class="lightbox" id="lightbox" aria-modal="true" role="dialog" aria-label="Photo viewer">
+        <div class="lightbox-inner">
+            <button class="lightbox-close" id="lightbox-close" aria-label="Close image viewer">×</button>
+            <img class="lightbox-image" id="lightbox-image" src="" alt="Expanded gallery image">
+            <div class="lightbox-controls">
+                <button class="lightbox-nav" id="lightbox-prev" aria-label="Previous image">←</button>
+                <span class="lightbox-counter" id="lightbox-counter">1 / 1</span>
+                <button class="lightbox-nav" id="lightbox-next" aria-label="Next image">→</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>

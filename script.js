@@ -1,5 +1,3 @@
-// Database object containing information and photos for each destination
-// Database object containing information and photos for each destination
 const galleryData = {
     toronto: {
         title: "Toronto, Canada",
@@ -84,20 +82,100 @@ const galleryData = {
     }
 };
 
-// Function that hides the home list and populates the dynamic stream
+const citySlides = [
+    { cityKey: 'toronto', name: 'Toronto', image: 'pics/toronto/IMG_5266.JPEG' },
+    { cityKey: 'montreal', name: 'Montreal', image: 'pics/montreal/IMG_6204.JPEG' },
+    { cityKey: 'ottawa', name: 'Ottawa', image: 'pics/ottawa/IMG_4913.JPEG' },
+    { cityKey: 'nyc', name: 'New York', image: 'pics/new_york/IMG_5877.JPEG' },
+    { cityKey: 'quebec_city', name: 'Quebec City', image: 'pics/Quebec_city/IMG_6159.JPEG' }
+];
+
+let currentSlideIndex = 0;
+let citySlideTimer = null;
+
+function renderHeroSlide(index) {
+    const slide = citySlides[index];
+    const heroVisual = document.getElementById('hero-visual');
+    const heroCity = document.getElementById('hero-city');
+    const heroIndex = document.getElementById('hero-index');
+
+    if (!slide || !heroVisual || !heroCity || !heroIndex) return;
+
+    heroVisual.style.backgroundImage = `url('${slide.image}')`;
+    heroVisual.setAttribute('data-city-key', slide.cityKey);
+    heroCity.textContent = slide.name;
+    heroIndex.textContent = String(index + 1).padStart(2, '0');
+}
+
+function nextHeroSlide() {
+    currentSlideIndex = (currentSlideIndex + 1) % citySlides.length;
+    renderHeroSlide(currentSlideIndex);
+}
+
+function startHeroSlideshow() {
+    clearInterval(citySlideTimer);
+    citySlideTimer = setInterval(nextHeroSlide, 3500);
+}
+
+let currentLightboxImages = [];
+let currentLightboxIndex = 0;
+
+function openLightbox(images, startIndex) {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCounter = document.getElementById('lightbox-counter');
+
+    if (!lightbox || !lightboxImage || !images.length) return;
+
+    currentLightboxImages = images;
+    currentLightboxIndex = startIndex;
+
+    const updateLightbox = () => {
+        const currentImage = currentLightboxImages[currentLightboxIndex];
+        lightboxImage.src = currentImage;
+        lightboxImage.alt = `Gallery image ${currentLightboxIndex + 1}`;
+        lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${currentLightboxImages.length}`;
+    };
+
+    updateLightbox();
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+    const lightbox = document.getElementById('lightbox');
+    if (!lightbox) return;
+
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+function goToPreviousImage() {
+    if (!currentLightboxImages.length) return;
+    currentLightboxIndex = (currentLightboxIndex - 1 + currentLightboxImages.length) % currentLightboxImages.length;
+    document.getElementById('lightbox-image').src = currentLightboxImages[currentLightboxIndex];
+    document.getElementById('lightbox-counter').textContent = `${currentLightboxIndex + 1} / ${currentLightboxImages.length}`;
+}
+
+function goToNextImage() {
+    if (!currentLightboxImages.length) return;
+    currentLightboxIndex = (currentLightboxIndex + 1) % currentLightboxImages.length;
+    document.getElementById('lightbox-image').src = currentLightboxImages[currentLightboxIndex];
+    document.getElementById('lightbox-counter').textContent = `${currentLightboxIndex + 1} / ${currentLightboxImages.length}`;
+}
+
 function openGallery(cityKey) {
     const data = galleryData[cityKey];
     if (!data) return;
 
-    // Set Title
-    document.getElementById('album-title').innerText = data.title;
-
-    // Build Image/Video Stream HTML
+    const title = document.getElementById('album-title');
     const streamContainer = document.getElementById('photo-stream-container');
-    streamContainer.innerHTML = ""; // Clear old content
-    
-    data.images.forEach(fileUrl => {
-        // Check if the file is a video format
+    const contactSection = document.getElementById('contact');
+
+    title.innerText = data.title;
+    streamContainer.innerHTML = "";
+
+    data.images.forEach((fileUrl, index) => {
         const isVideo = fileUrl.toLowerCase().endsWith('.mov') || fileUrl.toLowerCase().endsWith('.mp4');
 
         if (isVideo) {
@@ -106,67 +184,101 @@ function openGallery(cityKey) {
             videoElement.controls = true;
             videoElement.muted = true;
             videoElement.playsInline = true;
-            videoElement.style.width = "100%";
-            videoElement.style.marginBottom = "20px";
-            videoElement.style.borderRadius = "6px";
-            videoElement.style.boxShadow = "0 4px 10px rgba(0,0,0,0.05)";
             streamContainer.appendChild(videoElement);
         } else {
             const imgElement = document.createElement('img');
             imgElement.src = fileUrl;
             imgElement.alt = data.title + " Photo";
+            imgElement.addEventListener('click', () => openLightbox(data.images, index));
             streamContainer.appendChild(imgElement);
         }
     });
 
-    // Toggle Visibility
     document.getElementById('home-view').style.display = 'none';
     document.getElementById('album-view').style.display = 'block';
     document.getElementById('backBtn').style.display = 'block';
-    
-    // Smoothly scroll back to the top
+    if (contactSection) contactSection.style.display = 'none';
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Function to navigate back to the primary collection list
 function showHomeView() {
     document.getElementById('home-view').style.display = 'block';
     document.getElementById('album-view').style.display = 'none';
     document.getElementById('backBtn').style.display = 'none';
+    const contactSection = document.getElementById('contact');
+    if (contactSection) contactSection.style.display = 'block';
+    closeLightbox();
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+    const lightbox = document.getElementById('lightbox');
+    const closeButton = document.getElementById('lightbox-close');
+    const prevButton = document.getElementById('lightbox-prev');
+    const nextButton = document.getElementById('lightbox-next');
+    const heroVisual = document.getElementById('hero-visual');
+    const contactForm = document.getElementById('contactForm');
+    const formStatus = document.getElementById('form-status');
 
-// Function that hides the home list and populates the dynamic stream
-function openGallery(cityKey) {
-    const data = galleryData[cityKey];
-    if (!data) return;
+    renderHeroSlide(currentSlideIndex);
+    startHeroSlideshow();
 
-    // Set Title
-    document.getElementById('album-title').innerText = data.title;
-
-    // Build Image Stream HTML
-    const streamContainer = document.getElementById('photo-stream-container');
-    streamContainer.innerHTML = ""; // Clear old images
-    
-    data.images.forEach(imgUrl => {
-        const imgElement = document.createElement('img');
-        imgElement.src = imgUrl;
-        imgElement.alt = data.title + " Photo";
-        streamContainer.appendChild(imgElement);
+    heroVisual.addEventListener('click', () => {
+        const cityKey = heroVisual.getAttribute('data-city-key');
+        if (cityKey) {
+            openGallery(cityKey);
+        }
     });
 
-    // Toggle Visibility
-    document.getElementById('home-view').style.display = 'none';
-    document.getElementById('album-view').style.display = 'block';
-    document.getElementById('backBtn').style.display = 'block';
-    
-    // Smoothly scroll back to the top
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+    heroVisual.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            const cityKey = heroVisual.getAttribute('data-city-key');
+            if (cityKey) openGallery(cityKey);
+        }
+    });
 
-// Function to navigate back to the primary collection list
-function showHomeView() {
-    document.getElementById('home-view').style.display = 'block';
-    document.getElementById('album-view').style.display = 'none';
-    document.getElementById('backBtn').style.display = 'none';
-}
+    if (contactForm && formStatus) {
+        contactForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const name = contactForm.querySelector('#name').value.trim();
+            const email = contactForm.querySelector('#email').value.trim();
+            const message = contactForm.querySelector('#message').value.trim();
+
+            if (!name || !email || !message) {
+                formStatus.textContent = 'Please complete all fields before sending.';
+                return;
+            }
+
+            const subject = encodeURIComponent(`Portfolio inquiry from ${name}`);
+            const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
+            const mailtoLink = `mailto:sakshammishra1920@gmail.com?subject=${subject}&body=${body}`;
+
+            formStatus.textContent = 'Opening your email app...';
+            window.location.href = mailtoLink;
+            contactForm.reset();
+        });
+    }
+
+    closeButton.addEventListener('click', closeLightbox);
+    prevButton.addEventListener('click', goToPreviousImage);
+    nextButton.addEventListener('click', goToNextImage);
+
+    lightbox.addEventListener('click', (event) => {
+        if (event.target === lightbox) {
+            closeLightbox();
+        }
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (!lightbox.classList.contains('open')) return;
+
+        if (event.key === 'Escape') {
+            closeLightbox();
+        } else if (event.key === 'ArrowLeft') {
+            goToPreviousImage();
+        } else if (event.key === 'ArrowRight') {
+            goToNextImage();
+        }
+    });
+});
