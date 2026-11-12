@@ -26,7 +26,6 @@ const galleryData = {
             "pics/montreal/IMG_4572.JPEG",
             "pics/montreal/IMG_4609.JPEG",
             "pics/montreal/IMG_6204.JPEG",
-            "pics/montreal/IMG_6206.JPEG",
             "pics/montreal/IMG_6213.JPEG",
             "pics/montreal/IMG_6214.JPEG"
         ]
@@ -171,6 +170,9 @@ function openGallery(cityKey) {
     const title = document.getElementById('album-title');
     const streamContainer = document.getElementById('photo-stream-container');
     const contactSection = document.getElementById('contact');
+    const journeysNav = document.getElementById('journeys-nav');
+    const aboutNav = document.getElementById('about-nav');
+    const contactNav = document.getElementById('contact-nav');
 
     title.innerText = data.title;
     streamContainer.innerHTML = "";
@@ -197,14 +199,24 @@ function openGallery(cityKey) {
     document.getElementById('home-view').style.display = 'none';
     document.getElementById('album-view').style.display = 'block';
     document.getElementById('backBtn').style.display = 'block';
+    if (journeysNav) journeysNav.style.display = 'none';
+    if (aboutNav) aboutNav.style.display = 'none';
+    if (contactNav) contactNav.style.display = 'none';
     if (contactSection) contactSection.style.display = 'none';
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function showHomeView() {
+    const journeysNav = document.getElementById('journeys-nav');
+    const aboutNav = document.getElementById('about-nav');
+    const contactNav = document.getElementById('contact-nav');
+
     document.getElementById('home-view').style.display = 'block';
     document.getElementById('album-view').style.display = 'none';
     document.getElementById('backBtn').style.display = 'none';
+    if (journeysNav) journeysNav.style.display = 'inline';
+    if (aboutNav) aboutNav.style.display = 'inline';
+    if (contactNav) contactNav.style.display = 'inline';
     const contactSection = document.getElementById('contact');
     if (contactSection) contactSection.style.display = 'block';
     closeLightbox();
