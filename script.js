@@ -53,6 +53,9 @@ const galleryData = {
             "pics/new_york/IMG_5550.JPEG",
             "pics/new_york/IMG_5666.JPEG",
             "pics/new_york/IMG_5673.JPEG",
+            "pics/new_york/IMG_5707.JPEG",
+            "pics/new_york/IMG_5729.JPEG",
+            "pics/new_york/IMG_5769.JPEG",
             "pics/new_york/IMG_5774.JPEG",
             "pics/new_york/IMG_5866.JPEG",
             "pics/new_york/IMG_5877.JPEG"
@@ -82,11 +85,11 @@ const galleryData = {
 };
 
 const citySlides = [
-    { cityKey: 'toronto', name: 'Toronto', image: 'pics/toronto/IMG_5266.JPEG' },
-    { cityKey: 'montreal', name: 'Montreal', image: 'pics/montreal/IMG_6204.JPEG' },
-    { cityKey: 'ottawa', name: 'Ottawa', image: 'pics/ottawa/IMG_4913.JPEG' },
-    { cityKey: 'nyc', name: 'New York', image: 'pics/new_york/IMG_5877.JPEG' },
-    { cityKey: 'quebec_city', name: 'Quebec City', image: 'pics/Quebec_city/IMG_6159.JPEG' }
+    { cityKey: 'toronto', name: 'Toronto', image: 'pics/slideshow/toronto.jpg' },
+    { cityKey: 'montreal', name: 'Montreal', image: 'pics/slideshow/montreal.jpg' },
+    { cityKey: 'ottawa', name: 'Ottawa', image: 'pics/slideshow/ottawa.jpg' },
+    { cityKey: 'nyc', name: 'New York', image: 'pics/slideshow/new_york.jpg' },
+    { cityKey: 'quebec_city', name: 'Quebec City', image: 'pics/slideshow/quebec_city.jpg' }
 ];
 
 let currentSlideIndex = 0;
@@ -104,6 +107,10 @@ function renderHeroSlide(index) {
     heroVisual.setAttribute('data-city-key', slide.cityKey);
     heroCity.textContent = slide.name;
     heroIndex.textContent = String(index + 1).padStart(2, '0');
+
+    const nextSlide = citySlides[(index + 1) % citySlides.length];
+    const preloadedImage = new Image();
+    preloadedImage.src = nextSlide.image;
 }
 
 function nextHeroSlide() {
